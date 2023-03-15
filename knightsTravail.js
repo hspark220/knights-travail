@@ -116,6 +116,7 @@ function knightMoves (start, dest) {
         square = queue.pop();
         if (square != null) {
             if (JSON.stringify([square.x, square.y]) == JSON.stringify(dest)) {
+                result.push([square.x, square.y]);
                 return result;
             }
             if (!visitedSquares.includes(JSON.stringify([square.x, square.y]))) {
