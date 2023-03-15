@@ -101,66 +101,71 @@ class Square {
 
 }
 
-function knightMoves (start, dest, result = []) {
+function knightMoves (start, dest) {
     const board = new Board().board;
     if (start.length != 2 || dest.length != 2) return 'bad start or destination arrays';
     const startX = start[0];
     const startY = start[1];
-    const destX = dest[0];
-    const destY = dest[1];
 
-    const square = board[startX][startY];
+    let square = board[startX][startY];
+    const queue = [square];
+    const visitedSquares = [];
+    const result = [];
 
-    if (JSON.stringify(start)==JSON.stringify(dest)) {
-        return result;
-    } else {
-        if (square.leftUp != null && !JSON.stringify(result).includes(JSON.stringify([square.x, square.y]))) {
-            result.push([square.x, square.y]);
-            return knightMoves([square.leftUp.x, square.leftUp.y], dest, result);
+    while (queue.length > 0) {
+        square = queue.pop();
+        if (square != null) {
+            if (JSON.stringify([square.x, square.y]) == JSON.stringify(dest)) {
+                return result;
+            }
+            if (!visitedSquares.includes(JSON.stringify([square.x, square.y]))) {
+                visitedSquares.push([square.x, square.y]);
+                result.push([square.x, square.y]);
+                queue.unshift(square.leftUp);
+                queue.unshift(square.upLeft);
+                queue.unshift(square.rightUp);
+                queue.unshift(square.upRight);
+                queue.unshift(square.leftDown);
+                queue.unshift(square.downLeft);
+                queue.unshift(square.rightDown);
+                queue.unshift(square.downRight);
+            } else {
+                continue;
+            }
+        } else {
+            result.push('null');
         }
-        if (square.upLeft != null && !JSON.stringify(result).includes(JSON.stringify([square.x, square.y]))) {
-            result.push([square.x, square.y]);
-            return knightMoves([square.upLeft.x, square.upLeft.y],dest, result);
-        } 
-        if (square.rightUp != null && !JSON.stringify(result).includes(JSON.stringify([square.x, square.y]))) {
-            result.push([square.x, square.y]);
-            return knightMoves([square.rightUp.x, square.rightUp.y],dest, result);
-        }
-        if (square.upRight != null && !JSON.stringify(result).includes(JSON.stringify([square.x, square.y]))) {
-            result.push([square.x, square.y]);
-            return knightMoves([square.upRight.x, square.upRight.y],dest, result);
-        } 
-        if (square.leftDown != null && !JSON.stringify(result).includes(JSON.stringify([square.x, square.y]))) {
-            result.push([square.x, square.y]);
-            return knightMoves([square.leftDown.x, square.leftDown.y],dest, result);
-        } 
-        if (square.downLeft != null && !JSON.stringify(result).includes(JSON.stringify([square.x, square.y]))) {
-            result.push([square.x, square.y]);
-            return knightMoves([square.downLeft.x, square.downLeft.y],dest, result);
-        }
-        if (square.rightDown != null && !JSON.stringify(result).includes(JSON.stringify([square.x, square.y]))) {
-            result.push([square.x, square.y]);
-            return knightMoves([square.rightDown.x, square.rightDown.y],dest, result);
-        }
-        if (square.downRight != null && !JSON.stringify(result).includes(JSON.stringify([square.x, square.y]))) {
-            result.push([square.x, square.y]);
-            return knightMoves([square.downRight.x, square.downRight.y],dest, result);
-        }
-        else {
-            return null;
-        }
+        /*
+        if (square.leftUp != null) {
+            if (!visitedSquares.includes(JSON.stringify([square.leftUp.x, square.leftUp.y]))) queue.unshift(square.leftUp);
+        } else { visitedSquares.pop()}
+        if(square.upLeft != null) {
+            if (!visitedSquares.includes(JSON.stringify([square.upLeft.x, square.upLeft.y]))) queue.unshift(square.upLeft);
+        }else { visitedSquares.pop()}
+        if(square.rightUp != null) {
+            if (!visitedSquares.includes(JSON.stringify([square.rightUp.x, square.rightUp.y]))) queue.unshift(square.rightUp);
+        }else { visitedSquares.pop()}
+        if(square.upRight != null) {
+            if (!visitedSquares.includes(JSON.stringify([square.upRight.x, square.upRight.y]))) queue.unshift(square.upRight);
+        }else { visitedSquares.pop()}
+        if(square.leftDown != null) {
+            if (!visitedSquares.includes(JSON.stringify([square.leftDown.x, square.leftDown.y]))) queue.unshift(square.leftDown);
+        }else { visitedSquares.pop()}
+        if(square.downLeft != null) {
+            if (!visitedSquares.includes(JSON.stringify([square.downLeft.x, square.downLeft.y]))) queue.unshift(square.downLeft);
+        }else { visitedSquares.pop()}
+        if(square.rightDown != null) {
+            if (!visitedSquares.includes(JSON.stringify([square.rightDown.x, square.rightDown.y]))) queue.unshift(square.rightDown);
+        } else { visitedSquares.pop()}
+        if(square.downRight != null) {
+            if (!visitedSquares.includes(JSON.stringify([square.downRight.x, square.downRight.y]))) queue.unshift(square.downRight);
+        }else { visitedSquares.pop()}
+    */        
+
     }
+    return false
     
 }
 
-
-// const board = new Board();
-// console.log(board.board[0][0]);
- console.log(knightMoves([0,0],[1,2]));
-
-// const array = [[2,3],[1,2]];
-// console.log(array[0]);
-// console.log([2,3]);
-// console.log(JSON.stringify(array).includes(JSON.stringify([2,3])))
-
-// console.log(JSON.stringify([2,3]) == JSON.stringify(array[0]))
+const result = knightMoves([3,3],[4,3])
+console.log(result)
