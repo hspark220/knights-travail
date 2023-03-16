@@ -108,60 +108,59 @@ function knightMoves (start, dest) {
     const startY = start[1];
 
     let square = board[startX][startY];
+    const previousNodes = [[square, '']];
+    let previousNode;
     const queue = [square];
     const visitedSquares = [];
     const result = [];
 
     while (queue.length > 0) {
+        
         square = queue.pop();
+        if (square == 'newNode') {
+            square = queue.pop();
+            const newPrevious = previousNodes.pop();
+            
+            if (newPrevious[0] != null) {
+                console.log([newPrevious[0].x, newPrevious[0].y])
+                previousNode = [newPrevious[0].x, newPrevious[0].y, newPrevious[1]];
+
+            }
+           
+        }
+        queue.unshift('newNode')
         if (square != null) {
             if (JSON.stringify([square.x, square.y]) == JSON.stringify(dest)) {
-                result.push([square.x, square.y]);
+                result.push([square.x, square.y, previousNode]);
                 return result;
             }
-            if (!visitedSquares.includes(JSON.stringify([square.x, square.y]))) {
+            if (!JSON.stringify(visitedSquares).includes(JSON.stringify([square.x, square.y]))) {
                 visitedSquares.push([square.x, square.y]);
-                result.push([square.x, square.y]);
+                result.push([square.x, square.y, previousNode]);
+                
                 queue.unshift(square.leftUp);
+                previousNodes.unshift([square.leftUp, [[square.x, square.y], previousNode]]);
                 queue.unshift(square.upLeft);
+                previousNodes.unshift([square.upLeft, [[square.x, square.y], previousNode]]);
                 queue.unshift(square.rightUp);
+                previousNodes.unshift([square.rightUp, [[square.x, square.y], previousNode]]);
                 queue.unshift(square.upRight);
+                previousNodes.unshift([square.upRight, [[square.x, square.y], previousNode]]);
                 queue.unshift(square.leftDown);
+                previousNodes.unshift([square.leftDown, [[square.x, square.y], previousNode]]);
                 queue.unshift(square.downLeft);
+                previousNodes.unshift([square.leftDown, [[square.x, square.y], previousNode]]);
                 queue.unshift(square.rightDown);
+                previousNodes.unshift([square.rightDown, [[square.x, square.y], previousNode]]);
                 queue.unshift(square.downRight);
+                previousNodes.unshift([square.downRight, [[square.x, square.y], previousNode]]);
+                
             } else {
-                continue;
+                //result.push('visisted');
             }
         } else {
             result.push('null');
-        }
-        /*
-        if (square.leftUp != null) {
-            if (!visitedSquares.includes(JSON.stringify([square.leftUp.x, square.leftUp.y]))) queue.unshift(square.leftUp);
-        } else { visitedSquares.pop()}
-        if(square.upLeft != null) {
-            if (!visitedSquares.includes(JSON.stringify([square.upLeft.x, square.upLeft.y]))) queue.unshift(square.upLeft);
-        }else { visitedSquares.pop()}
-        if(square.rightUp != null) {
-            if (!visitedSquares.includes(JSON.stringify([square.rightUp.x, square.rightUp.y]))) queue.unshift(square.rightUp);
-        }else { visitedSquares.pop()}
-        if(square.upRight != null) {
-            if (!visitedSquares.includes(JSON.stringify([square.upRight.x, square.upRight.y]))) queue.unshift(square.upRight);
-        }else { visitedSquares.pop()}
-        if(square.leftDown != null) {
-            if (!visitedSquares.includes(JSON.stringify([square.leftDown.x, square.leftDown.y]))) queue.unshift(square.leftDown);
-        }else { visitedSquares.pop()}
-        if(square.downLeft != null) {
-            if (!visitedSquares.includes(JSON.stringify([square.downLeft.x, square.downLeft.y]))) queue.unshift(square.downLeft);
-        }else { visitedSquares.pop()}
-        if(square.rightDown != null) {
-            if (!visitedSquares.includes(JSON.stringify([square.rightDown.x, square.rightDown.y]))) queue.unshift(square.rightDown);
-        } else { visitedSquares.pop()}
-        if(square.downRight != null) {
-            if (!visitedSquares.includes(JSON.stringify([square.downRight.x, square.downRight.y]))) queue.unshift(square.downRight);
-        }else { visitedSquares.pop()}
-    */        
+        }  
 
     }
     return false
