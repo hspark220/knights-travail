@@ -118,13 +118,19 @@ function knightMoves (start, dest) {
         
         square = queue.pop();
         if (square == 'newNode') {
-            square = queue.pop();
-            const newPrevious = previousNodes.pop();
+            let newPrevious;
+            while (square == 'newNode') {
+                square = queue.pop();
+                newPrevious = previousNodes.pop();
+            }
             
-            if (newPrevious[0] != null) {
-                console.log([newPrevious[0].x, newPrevious[0].y])
-                previousNode = [newPrevious[0].x, newPrevious[0].y, newPrevious[1]];
 
+            if (newPrevious[0] != null) {
+                
+                
+                previousNode = [newPrevious[0].x, newPrevious[0].y, newPrevious[1]];
+            } else {
+                
             }
            
         }
@@ -132,34 +138,33 @@ function knightMoves (start, dest) {
         if (square != null) {
             if (JSON.stringify([square.x, square.y]) == JSON.stringify(dest)) {
                 result.push([square.x, square.y, previousNode]);
-                return result;
+                return result[result.length-1];
             }
             if (!JSON.stringify(visitedSquares).includes(JSON.stringify([square.x, square.y]))) {
                 visitedSquares.push([square.x, square.y]);
                 result.push([square.x, square.y, previousNode]);
-                
                 queue.unshift(square.leftUp);
-                previousNodes.unshift([square.leftUp, [[square.x, square.y], previousNode]]);
+                previousNodes.unshift([square.leftUp, [square.x, square.y, previousNode]]);
                 queue.unshift(square.upLeft);
-                previousNodes.unshift([square.upLeft, [[square.x, square.y], previousNode]]);
+                previousNodes.unshift([square.upLeft, [square.x, square.y, previousNode]]);
                 queue.unshift(square.rightUp);
-                previousNodes.unshift([square.rightUp, [[square.x, square.y], previousNode]]);
+                previousNodes.unshift([square.rightUp, [square.x, square.y, previousNode]]);
                 queue.unshift(square.upRight);
-                previousNodes.unshift([square.upRight, [[square.x, square.y], previousNode]]);
+                previousNodes.unshift([square.upRight, [square.x, square.y, previousNode]]);
                 queue.unshift(square.leftDown);
-                previousNodes.unshift([square.leftDown, [[square.x, square.y], previousNode]]);
+                previousNodes.unshift([square.leftDown, [square.x, square.y, previousNode]]);
                 queue.unshift(square.downLeft);
-                previousNodes.unshift([square.leftDown, [[square.x, square.y], previousNode]]);
+                previousNodes.unshift([square.leftDown, [square.x, square.y, previousNode]]);
                 queue.unshift(square.rightDown);
-                previousNodes.unshift([square.rightDown, [[square.x, square.y], previousNode]]);
+                previousNodes.unshift([square.rightDown, [square.x, square.y, previousNode]]);
                 queue.unshift(square.downRight);
-                previousNodes.unshift([square.downRight, [[square.x, square.y], previousNode]]);
+                previousNodes.unshift([square.downRight, [square.x, square.y, previousNode]]);
                 
             } else {
                 //result.push('visisted');
             }
         } else {
-            result.push('null');
+            //result.push('null');
         }  
 
     }
@@ -168,4 +173,14 @@ function knightMoves (start, dest) {
 }
 
 const result = knightMoves([3,3],[4,3])
-console.log(result)
+let tempResult = result;
+const realResult = [];
+while (tempResult != '') {
+    realResult.push([tempResult[0],tempResult[1]])
+    tempResult = tempResult[2];
+}
+
+console.log(`You made it in ${realResult.length-2} moves! Here's your path:`)
+console.log(realResult)
+
+
