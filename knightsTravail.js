@@ -104,10 +104,8 @@ class Square {
 function knightMoves (start, dest) {
     const board = new Board().board;
     if (start.length != 2 || dest.length != 2) return 'bad start or destination arrays';
-    const startX = start[0];
-    const startY = start[1];
 
-    let square = board[startX][startY];
+    let square = board[start[0]][start[1]];
     const previousNodes = [[square, '']];
     let previousNode;
     const queue = [square];
@@ -115,25 +113,17 @@ function knightMoves (start, dest) {
     const result = [];
 
     while (queue.length > 0) {
-        
         square = queue.pop();
         if (square == 'newNode') {
             let newPrevious;
+            //get rid of "empty" nodes
             while (square == 'newNode') {
                 square = queue.pop();
                 newPrevious = previousNodes.pop();
             }
-            
-
-            if (newPrevious[0] != null) {
-                
-                
-                previousNode = [newPrevious[0].x, newPrevious[0].y, newPrevious[1]];
-            } else {
-                
-            }
-           
+            if (newPrevious[0] != null) previousNode = [newPrevious[0].x, newPrevious[0].y, newPrevious[1]];
         }
+
         queue.unshift('newNode')
         if (square != null) {
             if (JSON.stringify([square.x, square.y]) == JSON.stringify(dest)) {
@@ -159,28 +149,25 @@ function knightMoves (start, dest) {
                 previousNodes.unshift([square.rightDown, [square.x, square.y, previousNode]]);
                 queue.unshift(square.downRight);
                 previousNodes.unshift([square.downRight, [square.x, square.y, previousNode]]);
-                
-            } else {
-                //result.push('visisted');
-            }
-        } else {
-            //result.push('null');
-        }  
+            } 
+        } 
 
     }
     return false
     
 }
 
-const result = knightMoves([3,3],[4,3])
+const result = knightMoves([2,2],[3,4])
 let tempResult = result;
 const realResult = [];
-while (tempResult != '') {
+while (tempResult != null) {
     realResult.push([tempResult[0],tempResult[1]])
     tempResult = tempResult[2];
 }
 
 console.log(`You made it in ${realResult.length-2} moves! Here's your path:`)
-console.log(realResult)
+for (let i = realResult.length-1; i >= 0; i--) {
+    console.log(realResult[i]);
+}
 
 
